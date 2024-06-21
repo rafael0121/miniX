@@ -1,51 +1,13 @@
-#===============================================================================
-# Directories
-#===============================================================================
+all: server client_display client_send
 
-export SOURCE_DIR = $(CURDIR)/src
-export INCLUDE_DIR = $(CURDIR)/include
-export BINARIES_DIR = $(CURDIR)/bin
-export LIBRARIE_DIR = $(CURDIR)/lib
+server: server.c
+	gcc -o server server.c
 
-export BINARIES = $(BINARIES_DIR)/$(wildcard *.elf)
+client_display: client_display.c
+	gcc -o client_display client_display.c
 
-#===============================================================================
-# Toolchain
-#===============================================================================
-
-export CC = gcc
-export AR = ar
-
-#===============================================================================
-# Toolchain Configuration
-#===============================================================================
-
-# Gcc flags.
-export CFLAGS += -Wall -Wextra -Werror
-export CFLAGS += -Winit-self -Wswitch-default -Werror
-export CFLAGS += -Wshadow -Wuninitialized -Wlogical-op
-export CFLAGS += -Wvla -Wredundant-decls
-export CFLAGS += -pedantic-errors
-
-# Ar flags.
-export ARFLAGS = rcs
-
-#===============================================================================
-# Run Rules
-#===============================================================================
-
-.PHONY: all server client
-
-all: clean makedir source
-
-source:
-	$(MAKE) -C $(SOURCE_DIR) all
-
-makedir:
-	mkdir $(CURDIR)/bin
-	mkdir $(CURDIR)/lib
+client_send: client_send.c
+	gcc -o client_send client_send.c
 
 clean:
-	$(MAKE) -C $(SOURCE_DIR) clean
-	rm -rf $(BINARIES_DIR)
-	rm -rf $(LIBRARIE_DIR)
+	rm -f server client_display client_send
